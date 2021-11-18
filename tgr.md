@@ -45,12 +45,14 @@ En el caso de la TGR, Cognito crea una capa de abstracción al actuar como inter
 
 <p align="center">
   <br/>
-  <img src="final.svg" alt="Amazon Cognito"/>
+  <img src="final.svg" alt="Arquitectura final"/>
   <br/>
 </p>
 
 1. El usuario carga la aplicación web de la TGR.
-2. Antes de dibujar la página, la aplicación consulta a Cognito por los proveedores de identidad que tiene configurados y usa la respuesta para mostrar las opciones.
+2. Antes de dibujar la página, la aplicación consulta a Cognito por los proveedores de identidad que habilitados y usa la respuesta para mostrar las opciones.
 3. Luego de que el usuario selecciona un proveedor de identidad, la aplicación invoca a Cognito para que que inicie el flujo de autenticación. 
 4. Cognito inicia el flujo OIDC con ClaveÚnica.
-5. ClaveÚnica devuelve el *Código de Autorización* como flujo de 
+5. ClaveÚnica devuelve el *Código de Autorización* como parte del flujo OIDC.
+6. Cognito intercepta el flujo OIDC y ejecuta una función Lambda para 
+7. 
