@@ -10,7 +10,11 @@ En el 2010 el Gobierno de Chile lanzó ClaveÚnica, una contraseña unificada pa
 
 Tras bambalinas ClaveÚnica es un proveedor de identidad que implementa el protocolo OpenID Connect (OIDC). OIDC es una capa de identidad sobre OAuth 2.0 que le permite a las aplicaciones de terceros verificar la identidad del usuario final y obtener información básica del mismo. OIDC utiliza JSON Web Tokens (JWT) que obtiene mediante flujos que cumplen con las especificaciones de OAuth 2.0. El siguiente diagrama de sequencia resume el flujo de autenticación OIDC:
 
-![Flujo OIDC](oidc.svg)
+<p align="center">
+  <br/>
+  <img src="oidc.svg" alt="Flujo OIDC"/>
+  <br/>
+</p>
 
 1. El *Cliente* inicia el flujo con la redirección del usuario a la URL del *Servidor de Autorización*, junto con ello envía los *Scopes*;  permisos granulares que el *Cliente* requiere que el usuario le otorgue. En este caso, para indicar que es un flujo OIDC, el *Cliente* incluye el *Scope* "oidc".
 2. El usuario se autentica en el formulario de login del *Servidor de Autorización* y confirma que quiere otorgar los *Scopes* que el *Cliente* solicitó en el paso anterior.
@@ -20,12 +24,33 @@ Tras bambalinas ClaveÚnica es un proveedor de identidad que implementa el proto
 
 En el diagrama anterior las aplicaciones de la TGR cumplen el rol de *Cliente* mientras que ClaveÚnica cumple el rol del *Servidor de Autorización*. 
 
-## Federando Identidades con Amazon Cognito
+## Abstrayendo la autenticación de la lógica de negocio
 
-Uno de los desafíos de implementar flujo de OIDC es que todas las aplicaciones que necesiten autenticarse deben implementarlo. Para solucionar estos temas, la TGR implementó Amazon Cognito como intermediario entre sus aplicaciones y los distintos proveedores de identidad.
+Sin embargo, implementar el flujo OIDC tiene varios desafíos: 1. Todas las aplicaciones que necesitan autenticar al usuario final deben implementarlo, 2. Mantener actualizados los componentes que ejecutan el flujo OIDC para que sea seguro y complacente no es trivial, y 3. Cada vez que queremos integrar un nuevo proveedor de identidad se vuelve necesario intervenir las aplicaciones.
 
-Amazon Cognito es un servico que permite incorporar de manera rápida y sencilla el registro, inicio de sesión y control de acceso a aplicaciones web y móviles. Amazon Cognito puede escalar a millones de usuarios y admite el inicio de sesión de proveedores de identidad como OIDC, SAML y redes sociales.
+Para solucionar estos temas, la TGR utiliza Amazon Cognito. Cognito es un servico que permite incorporar de manera rápida y sencilla el registro, inicio de sesión y control de acceso a aplicaciones web y móviles. Cognito puede escalar a millones de usuarios y soporta el inicio de sesión de proveedores de identidad como OIDC, SAML y redes sociales.
 
-## 
+En el caso de la TGR, Cognito crea una capa de abstracción al actuar como intermediario entre ClaveÚnica y las aplicaciones, esto le permite a la TGR desacoplar la autenticación de la lógica de negocio. Esta capa de abstracción, además de separar las responsabilidades de los componentes, le da mayor agilidad a los desarolladores de la TGR -porque ya no deben preocuparse por mantener el flujo OIDC- y le permite agregar nuevos proveedores de identidad sin tener que modificar las aplicaciones. El siguiente diagrama de arquitectura muestra el flujo OIDC con Cognito:
 
-Cuando la TGR 
+<p>
+  <br/>
+  <img src="cognito.svg" alt="Amazon Cognito"/>
+  <br/>
+</p>
+
+1. La 
+2. 
+
+## Cuando la TGR 
+
+<p align="center">
+  <br/>
+  <img src="final.svg" alt="Amazon Cognito"/>
+  <br/>
+</p>
+
+1. El usuario carga la aplicación web de la TGR.
+2. Antes de dibujar la página, la aplicación consulta a Cognito por los proveedores de identidad que tiene configurados y usa la respuesta para mostrar las opciones.
+3. Luego de que el usuario selecciona un proveedor de identidad, la aplicación invoca a Cognito para que que inicie el flujo de autenticación. 
+4. Cognito inicia el flujo OIDC con ClaveÚnica.
+5. ClaveÚnica devuelve el *Código de Autorización* como flujo de 
