@@ -32,16 +32,19 @@ Para solucionar estos temas, la TGR utiliza Amazon Cognito. Cognito es un servic
 
 En el caso de la TGR, Cognito crea una capa de abstracción al actuar como intermediario entre ClaveÚnica y las aplicaciones, esto le permite a la TGR desacoplar la autenticación de la lógica de negocio. Esta capa de abstracción, además de separar las responsabilidades de los componentes, le da mayor agilidad a los desarolladores de la TGR -porque ya no deben preocuparse por mantener el flujo OIDC- y le permite agregar nuevos proveedores de identidad sin tener que modificar las aplicaciones. El siguiente diagrama de arquitectura muestra el flujo OIDC con Cognito:
 
-<p>
+<p align="center">
   <br/>
   <img src="cognito.svg" alt="Amazon Cognito"/>
   <br/>
 </p>
 
-1. La 
+1. La aplicación le instruye a 
 2. 
 
-## Cuando la TGR 
+## Interceptando el flujo OIDC
+
+**TODO: Introducir por qué necesitamos interceptar el protocolo OIDC**
+**TODO: Confirmar el diagrama de arquitectura final con el cliente**
 
 <p align="center">
   <br/>
@@ -52,7 +55,12 @@ En el caso de la TGR, Cognito crea una capa de abstracción al actuar como inter
 1. El usuario carga la aplicación web de la TGR.
 2. Antes de dibujar la página, la aplicación consulta a Cognito por los proveedores de identidad que habilitados y usa la respuesta para mostrar las opciones.
 3. Luego de que el usuario selecciona un proveedor de identidad, la aplicación invoca a Cognito para que que inicie el flujo de autenticación. 
-4. Cognito inicia el flujo OIDC con ClaveÚnica.
+4. Cognito inicia el flujo OIDC contra ClaveÚnica.
 5. ClaveÚnica devuelve el *Código de Autorización* como parte del flujo OIDC.
-6. Cognito intercepta el flujo OIDC y ejecuta una función Lambda para 
-7. 
+6. Antes de continuar con el intercambio del *Código de Autorización* por el *Token de Identidad* y el *Token de Acceso*, Cognito invoca una función Lambda. 
+7. La función Lambda mapea el *Código de Autorización* enviado por ClaveÚnica a un nuevo *Código de Autorización* generado aleatoriamente. El mapeo del *Token de Autorización* original al nuevo *Token de Autorización* lo persiste en DynamoDB.
+8. La función Lambda retorna el nuevo *Código de Autorización*.
+9. Cognito continua el flujo OIDC con el *Código de Autorización*
+10. ClaveÚnica responde el *Token de Identidad* y el *Token de Acceso*
+11. Cognito devuelve los tokens a la aplicación, junto con el resultado del proceso de autenticación.
+12. La aplicación le presenta al usuario
