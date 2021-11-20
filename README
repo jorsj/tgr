@@ -12,7 +12,7 @@ Tras bambalinas ClaveÚnica es un proveedor de identidad que implementa el proto
 
 <p align="center">
   <br/>
-  <img src="oidc.svg" alt="Flujo OIDC"/>
+  <img src="https://raw.githubusercontent.com/jorsj/tgr/master/oidc.svg" alt="Flujo OIDC"/>
   <br/>
 </p>
 
@@ -34,7 +34,7 @@ En el caso de la TGR, Cognito crea una capa de abstracción al actuar como inter
 
 <p align="center">
   <br/>
-  <img src="cognito.svg" alt="Amazon Cognito"/>
+  <img src="https://raw.githubusercontent.com/jorsj/tgr/master/cognito.svg" alt="Amazon Cognito"/>
   <br/>
 </p>
 
@@ -43,12 +43,14 @@ En el caso de la TGR, Cognito crea una capa de abstracción al actuar como inter
 
 ## Interceptando el flujo OIDC
 
-**TODO: Introducir por qué necesitamos interceptar el protocolo OIDC**
-**TODO: Confirmar el diagrama de arquitectura final con el cliente**
+TODO:
+
+* [ ] Introducir contexto de por qué necesitamos interceptar el protocolo OIDC.
+* [ ] Revisar el diagrama de arquitectura final con el cliente.
 
 <p align="center">
   <br/>
-  <img src="final.svg" alt="Arquitectura final"/>
+  <img src="https://raw.githubusercontent.com/jorsj/tgr/master/final.svg" alt="Arquitectura final"/>
   <br/>
 </p>
 
