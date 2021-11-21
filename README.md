@@ -69,13 +69,9 @@ Para solucionar estos incovenientes
 
 4. Cognito inicia el flujo OIDC contra ClaveÚnica y ClaveÚnica devuelve el *Código de Autorización*.
 
-5. Como el *Código de Autorización* que responde ClaveÚnica no cumple con el largo mínimo requerido por Cognito, la TGR interviene el flujo OIDC para reemplazar el *Código de Autorización* original por uno nuevo. De esta forma Cognito cree que el *Código de Autorización* es complaciente y permite que el flujo OIDC continue. 
- 
-Para hacer esto, la TGR configuró a Cognito para que una vez reciba el *Código de Autorización*, este invoque una función Lambda. Las funciones Lambda son un servicio de cómputo que permite ejecutar código sin aprovisionar ni administrar servidores.
+5. Como el *Código de Autorización* que responde ClaveÚnica no cumple con el largo mínimo requerido por Cognito, la TGR interviene el flujo OIDC para reemplazar el *Código de Autorización* original por uno nuevo. De esta forma Cognito cree que el *Código de Autorización* es complaciente y permite que el flujo OIDC continue. Para hacer esto, la TGR configuró a Cognito para que una vez reciba el *Código de Autorización*, este invoque una función Lambda. Las funciones Lambda son un servicio de cómputo que permite ejecutar código sin aprovisionar ni administrar servidores.
 
-6.  Lambda autogenera un código con las especificaciones requeridas por Cognito y produce un JSON con el mapeo del *Código de Autorización* original al nuevo. Luego Lambda envía este documento a Amazon DynamoDB para ser persistido.
-
-DynamoDB es un servicio de base de datos NoSQL rápido y flexible con tiempos de respuesta menores a diez milisegundos a cualquier escala.
+6.  Lambda autogenera un código con las especificaciones requeridas por Cognito y produce un JSON con el mapeo del *Código de Autorización* original al nuevo. Luego Lambda envía este documento a Amazon DynamoDB para ser persistido. DynamoDB es un servicio de base de datos NoSQL rápido y flexible con tiempos de respuesta menores a diez milisegundos a cualquier escala.
 
 7.  La función Lambda retorna el nuevo *Código de Autorización*.
 
