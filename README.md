@@ -83,4 +83,8 @@ Para solucionar estos incovenientes
 
 ## Conclusiones
 
-Junto a la TGR seguimos trabajando para brindar servicios a la ciudadanía, adoptando arquitecturas serverless, reduciendo así la complejidad, costos operativos y aumentando la performance.
+Utilizando una arquitectura completamente serverless, la TGR consiguió desacoplar sus aplicaciones del mecanismo de autenticación lo que les da mayor flexibilidad a la hora de implementar nuevos proveedores de identidad, como mayor agilidad al momento de desarollar.
+
+Junto a la TGR seguimos trabajando en brindar más servicios a la ciudadanía, con arquitecturas seguras, que reducen la complejidad, costos operativos y que permiten escalar a medida que la demanda lo requiera.
+
+Si te interesa aprendar más de Cognito y arquitecturas serverless te recomiendo el siguiente [enlace](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/module-2/).
