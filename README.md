@@ -50,7 +50,8 @@ Como pueden ver, utilizar Cognito reduce la complejidad de la arquitectura y per
 
 Sin embargo, cuando la TGR comenzó a utilizar Cognito se encontró con dos dificultades adicionales:
 
-1.[A pesar de que la IU puede personalizarse con logotipos y estilos del cliente](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-ui-customization.html), el formulario de inicio de sesión se presenta en Inglés y era necesario mostarlo en Español.
+1. [A pesar de que la IU puede personalizarse con logotipos y estilos del cliente](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-ui-customization.html), el formulario de inicio de sesión se presenta en Inglés y era necesario mostarlo en Español.
+
 2. El largo del *Código de Autorización* que responde ClaveÚnica no cumplía con las especificaciones mínimas para poder ser utilizado por Cognito.
 
 Para el primer tema, la TGR creó un frontend en Español que le permite al usuario seleccionar el proveedor de identidad que desea utilizar. Este frontend está escrito en Angular y es alojado en Amazon Simple Storage Service (S3); el servicio de almacenamiento de objetos de AWS que permite [alojar sitios web estáticos](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html) sin tener que aprovisionar servidores web.
