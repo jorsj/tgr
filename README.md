@@ -12,9 +12,10 @@ Tras bambalinas ClaveÚnica es un proveedor de identidad que implementa el proto
 
 <p align="center">
   <br/>
-  <img src="https://raw.githubusercontent.com/jorsj/tgr/master/oidc.svg" alt="Flujo OIDC"/>
+  <img src="oidc.svg" alt="Flujo OIDC"/>
   <br/>
 </p>
+
 
 1. El *Cliente* inicia el flujo con la redirección del usuario a la URL del *Servidor de Autorización*, junto con ello envía los *Scopes*;  permisos granulares que el *Cliente* requiere que el usuario le otorgue. En este caso, para indicar que es un flujo OIDC, el *Cliente* incluye el *Scope* “oidc”.
 2. El usuario se autentica en el formulario de login del *Servidor de Autorización* y confirma que quiere otorgar los *Scopes* que el *Cliente* solicitó en el paso anterior.
@@ -38,9 +39,10 @@ Para el inicio de sesión con terceros, [Cognito puede alojar una interfaz de us
 En el caso de la TGR,  Amazon Cognito crea una capa de abstracción al actuar como intermediario entre ClaveÚnica y las aplicaciones, esto le permite a la TGR desacoplar la autenticación de la lógica de negocio. Esta capa de abstracción, además de separar las responsabilidades de los componentes, le da mayor agilidad a los desarrolladores de la TGR -porque ya no deben preocuparse por mantener el flujo OIDC- y le permite agregar nuevos proveedores de identidad sin tener que modificar las aplicaciones. El siguiente diagrama de arquitectura muestra el flujo OIDC con Amazon Cognito:
 <p align="center">
   <br/>
-  <img src="https://raw.githubusercontent.com/jorsj/tgr/master/cognito.png" alt="Amazon Cognito"/>
+  <img src="cognito.png" alt="Amazon Cognito"/>
   <br/>
 </p>
+
 
 1. La aplicación de la TGR redirige al usuario a la IU de Cognito. El usuario selecciona ClaveÚnica como proveedor de identidad.
 2. Amazon Cognito realiza el flujo OIDC para obtener el *Token de Identidad* y el *Token de Acceso*.
@@ -65,9 +67,10 @@ El siguiente diagrama de arquitectura muestra la implementación completa luego 
 
 <p align="center">
   <br/>
-  <img src="https://raw.githubusercontent.com/jorsj/tgr/master/final.png" alt="Arquitectura final"/>
+  <img src="final.png" alt="Arquitectura final"/>
   <br/>
 </p>
+
 
 1. El usuario carga el frontend de autenticación de la TGR desde S3.
 2. Antes de mostrar la página, el frontend consulta a Amazon Cognito por los proveedores de identidad habilitados y usa la respuesta para dibujar las opciones.
