@@ -57,9 +57,9 @@ Sin embargo, cuando la TGR comenzó a utilizar Amazon Cognito se encontró con d
 
 Para el primer tema, la TGR creó un frontend en Español que le permite al usuario seleccionar el proveedor de identidad que desea utilizar. Este frontend está escrito en Angular y es alojado en Amazon Simple Storage Service (S3); el servicio de almacenamiento de objetos de AWS que permite [alojar sitios web estáticos](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteHosting.html) sin tener que aprovisionar servidores web.
 
-Para el segundo tema, la TGR utiliza la [integración nativa de Amazon Cognito con AWS Lambda](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html) para interceptar el flujo OIDC y ajustar el *Código de Autorización*; Lambda es un servicio de cómputo que permite ejecutar código sin aprovisionar ni administrar servidores y que Amazon Cognito puede invocar durante las operaciones de registro, confirmación e inicio de sesión. 
+Para el segundo tema, la TGR utiliza la [integración nativa de Amazon Cognito con AWS Lambda](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html) para interceptar el flujo OIDC y ajustar el *Código de Autorización*; AWS Lambda es un servicio de cómputo que permite ejecutar código sin aprovisionar ni administrar servidores y que Amazon Cognito puede invocar durante las operaciones de registro, confirmación e inicio de sesión. 
 
-El rol que cumple la función Lambda es el de generar un nuevo *Código de Autorización* complaciente con los requerimientos de Amazon Cognito, crear un documento con el mapeo entre el código original y el nuevo, y finalmente almacenarlo en Amazon DynamoDB para ser utilizado después.
+El rol que cumple la función AWS Lambda es el de generar un nuevo *Código de Autorización* complaciente con los requerimientos de Amazon Cognito, crear un documento con el mapeo entre el código original y el nuevo, y finalmente almacenarlo en Amazon DynamoDB para ser utilizado después.
 
 El siguiente diagrama de arquitectura muestra la implementación completa luego de incorporar estos dos puntos:
 
@@ -73,9 +73,9 @@ El siguiente diagrama de arquitectura muestra la implementación completa luego 
 2. Antes de mostrar la página, el frontend consulta a Amazon Cognito por los proveedores de identidad habilitados y usa la respuesta para dibujar las opciones.
 3. El usuario selecciona ClaveÚnica como proveedor de identidad y la aplicación invoca a Amazon Cognito para comenzar el flujo de autenticación.
 4. Amazon Cognito inicia el flujo OIDC contra ClaveÚnica y ClaveÚnica devuelve el *Código de Autorización*.
-5. Amazon Cognito invoca una función Lambda para reemplazar el *Código de Autorización* original por uno nuevo.
-6. La función Lambda auto-genera el nuevo *Código de Autorización*, produce el documento con el mapeo del *Código de Autorización* original al nuevo y lo envía a DynamoDB para ser almacenado.
-7.  La función Lambda retorna el nuevo *Código de Autorización*.
+5. Amazon Cognito invoca una función AWS Lambda para reemplazar el *Código de Autorización* original por uno nuevo.
+6. La función AWS Lambda auto-genera el nuevo *Código de Autorización*, produce el documento con el mapeo del *Código de Autorización* original al nuevo y lo envía a Amazon DynamoDB para ser almacenado.
+7.  La función AWS Lambda retorna el nuevo *Código de Autorización*.
 8.  Amazon Cognito continua el flujo OIDC con el nuevo *Código de Autorización*, y ClaveÚnica responde el *Token de Identidad* y el *Token de Acceso*.
 9.  Amazon Cognito devuelve los tokens a la aplicación junto con el resultado del proceso de autenticación.
 10. La aplicación le informa al usuario que el inicio de sesión fue realizado correctamente.
@@ -86,4 +86,4 @@ Con una arquitectura completamente serverless la TGR consiguió desacoplar sus a
 
 Junto a la TGR seguimos trabajando en brindar más servicios a la ciudadanía, con arquitecturas seguras, que reducen la complejidad, costos operativos y que permiten escalar a medida que la demanda lo requiera.
 
-Si quieres aprender más de Amazon Cognito y de arquitecturas serverless, te recomiendo el siguiente [enlace](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/module-2/).
+Si quieres aprender más de Amazon Cognito y de arquitecturas serverless, te recomendamos el siguiente [enlace](https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/module-2/).
