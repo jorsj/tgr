@@ -8,7 +8,7 @@ En el 2010 el Gobierno de Chile lanzó ClaveÚnica, una contraseña unificada pa
 
 ## OpenID Connect
 
-Tras bambalinas ClaveÚnica es un proveedor de identidad que implementa el protocolo OpenID Connect (OIDC). OIDC es una capa de identidad sobre OAuth 2.0 que le permite a las aplicaciones de terceros verificar la identidad del usuario final y obtener información básica del mismo. OIDC utiliza JSON Web Tokens (JWT) que obtiene mediante flujos que cumplen con las especificaciones de OAuth 2.0. El siguiente diagrama de secuencia resume el flujo de autenticación OIDC:
+Tras bambalinas, ClaveÚnica es un proveedor de identidad que implementa el protocolo OpenID Connect (OIDC). OIDC es una capa de identidad sobre OAuth 2.0 que le permite a las aplicaciones de terceros verificar la identidad del usuario final y obtener información básica del mismo. OIDC utiliza JSON Web Tokens (JWT) que obtiene mediante flujos que cumplen con las especificaciones de OAuth 2.0. El siguiente diagrama de secuencia resume el flujo de autenticación OIDC:
 
 <p align="center">
   <br/>
@@ -28,13 +28,13 @@ En el diagrama anterior las aplicaciones de la TGR cumplen el rol de *Cliente* m
 ## Abstrayendo la autenticación de las aplicaciones
 
 Ahora, implementar el flujo OIDC tiene varios desafíos:
-1. Todas las aplicaciones que necesitan autenticar al usuario final deben implementarlo
-2. Mantener actualizados los componentes que ejecutan el flujo OIDC para que sea seguro y complaciente no es trivial
+1. Todas las aplicaciones que necesitan autenticar al usuario final deben implementarlo.
+2. Mantener actualizados los componentes que ejecutan el flujo OIDC para que sea seguro y complaciente no es trivial.
 3. Cada vez que queremos integrar un nuevo proveedor de identidad se vuelve necesario intervenir las aplicaciones.
 ​
 Para solucionar estos temas, la TGR utiliza Amazon Cognito. Amazon Cognito es un servicio que permite incorporar de manera rápida y sencilla el registro, inicio de sesión y control de acceso a aplicaciones web y móviles. Amazon Cognito puede escalar a millones de usuarios y soporta el inicio de sesión de proveedores de identidad como OIDC, Security Assertion Markup Language (SAML) y redes sociales como Facebook, Twitter, Amazon, etc.
 
-Para el inicio de sesión con terceros, [Cognito puede alojar una interfaz de usuario (IU)](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-integration.html) compatible con OAuth 2.0 que implementa el rol de *Cliente* y le permite al usuario seleccionar el proveedor de identidad con el que desea autenticarse.
+Para el inicio de sesión con terceros, [Amazon Cognito puede alojar una interfaz de usuario (IU)](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-app-integration.html) compatible con OAuth 2.0 que implementa el rol de *Cliente* y le permite al usuario seleccionar el proveedor de identidad con el que desea autenticarse.
 
 En el caso de la TGR,  Amazon Cognito crea una capa de abstracción al actuar como intermediario entre ClaveÚnica y las aplicaciones, esto le permite a la TGR desacoplar la autenticación de la lógica de negocio. Esta capa de abstracción, además de separar las responsabilidades de los componentes, le da mayor agilidad a los desarrolladores de la TGR -porque ya no deben preocuparse por mantener el flujo OIDC- y le permite agregar nuevos proveedores de identidad sin tener que modificar las aplicaciones. El siguiente diagrama de arquitectura muestra el flujo OIDC con Amazon Cognito:
 <p align="center">
@@ -44,7 +44,7 @@ En el caso de la TGR,  Amazon Cognito crea una capa de abstracción al actuar co
 </p>
 
 
-1. La aplicación de la TGR redirige al usuario a la IU de Cognito. El usuario selecciona ClaveÚnica como proveedor de identidad.
+1. La aplicación de la TGR redirige al usuario a la IU de Amazon Cognito. El usuario selecciona ClaveÚnica como proveedor de identidad.
 2. Amazon Cognito realiza el flujo OIDC para obtener el *Token de Identidad* y el *Token de Acceso*.
 3. Amazon Cognito devuelve los tokens a la aplicación de la TGR, la cual le informa al usuario que el inicio de sesión fue exitoso.
 
@@ -72,20 +72,20 @@ El siguiente diagrama de arquitectura muestra la implementación completa luego 
 </p>
 
 
-1. El usuario carga el frontend de autenticación de la TGR desde S3.
+1. El usuario carga el frontend de autenticación de la TGR desde Amazon S3.
 2. Antes de mostrar la página, el frontend consulta a Amazon Cognito por los proveedores de identidad habilitados y usa la respuesta para dibujar las opciones.
 3. El usuario selecciona ClaveÚnica como proveedor de identidad y la aplicación invoca a Amazon Cognito para comenzar el flujo de autenticación.
 4. Amazon Cognito inicia el flujo OIDC contra ClaveÚnica y ClaveÚnica devuelve el *Código de Autorización*.
 5. Amazon Cognito invoca una función AWS Lambda para reemplazar el *Código de Autorización* original por uno nuevo.
-6. La función AWS Lambda auto-genera el nuevo *Código de Autorización*, produce el documento con el mapeo del *Código de Autorización* original al nuevo y lo envía a Amazon DynamoDB para ser almacenado.
-7.  La función AWS Lambda retorna el nuevo *Código de Autorización*.
+6. La función de AWS Lambda auto-genera el nuevo *Código de Autorización*, produce el documento con el mapeo del *Código de Autorización* original al nuevo y lo envía a Amazon DynamoDB para ser almacenado.
+7.  La función de AWS Lambda retorna el nuevo *Código de Autorización*.
 8.  Amazon Cognito continua el flujo OIDC con el nuevo *Código de Autorización*, y ClaveÚnica responde el *Token de Identidad* y el *Token de Acceso*.
 9.  Amazon Cognito devuelve los tokens a la aplicación junto con el resultado del proceso de autenticación.
 10. La aplicación le informa al usuario que el inicio de sesión fue realizado correctamente.
 
 ## Conclusiones
 
-Con una arquitectura completamente serverless la TGR consiguió desacoplar sus aplicaciones del mecanismo de autenticación. Esto les permite escalar a miles de usuarios concurrentes, mejorar su time-to-market para nuevas funcionalidades y reducir el costo operativo de sus sistemas.
+Con una arquitectura completamente serverless, la TGR consiguió desacoplar sus aplicaciones del mecanismo de autenticación. Esto les permite escalar a miles de usuarios concurrentes, mejorar su time-to-market para nuevas funcionalidades y reducir el costo operativo de sus sistemas.
 
 Junto a la TGR seguimos trabajando en brindar más servicios a la ciudadanía, con arquitecturas seguras, que reducen la complejidad, costos operativos y que permiten escalar a medida que la demanda lo requiera.
 
