@@ -62,11 +62,11 @@ Desde Amazon S3  la TGR disponibliza un HTML que usa el SDK de Amazon Cognito pa
 
 Además de proveer servicios a la ciudadanía en general, la TGR también entrega servicios a empresas. El proceso de autenticación para las empresas utiliza Clave Tributaria, en vez de ClaveÚnica, otro proveedor de identidad que implementa el flujo OIDC y que es disponibilizado por el Servicio de Impuesto Internos (SII).
 
-En principio, implementar un nuevo proveedor de identidad con Amazon Cognito es trivial. Sin embargo cuando la TGR agregó la Clave Tributaria se dio cuenta que el largo del *Código de Autorización* que responde Clave Tributaria no cumplía con las especificaciones mínimas para poder ser utilizado por Amazon Cognito.
+En principio, implementar un nuevo proveedor de identidad con Amazon Cognito es trivial. Sin embargo cuando la TGR agregó Clave Tributaria se dio cuenta que el largo del *Código de Autorización* no cumplía con las especificaciones mínimas para poder ser utilizado por Amazon Cognito.
 
 Para amendar esta situación, la TGR utiliza la [integración nativa de Amazon Cognito con AWS Lambda](https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools-working-with-aws-lambda-triggers.html) para interceptar el flujo OIDC y ajustar el *Código de Autorización*; AWS Lambda es un servicio de cómputo que permite ejecutar código sin aprovisionar ni administrar servidores y que Amazon Cognito puede invocar durante las operaciones de registro, confirmación e inicio de sesión. 
 
-El rol que cumple la función AWS Lambda es el de generar un nuevo *Código de Autorización* complaciente con los requerimientos de Amazon Cognito, crear un documento con el mapeo entre el código original y el nuevo, y finalmente almacenarlo en Amazon DynamoDB para ser utilizado después.
+El rol que cumple la función de AWS Lambda es el de generar un nuevo *Código de Autorización* —complaciente con los requerimientos de Amazon Cognito—, mapear el código original al nuevo, y almacenar el mapeo en Amazon DynamoDB para ser utilizado después.
 
 El siguiente diagrama de arquitectura muestra la implementación completa luego de incorporar la UI en Español y la interceptación del flujo OIDC:
 
